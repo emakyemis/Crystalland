@@ -4,6 +4,10 @@ import { StyleSheet, Text, View} from 'react-native';
 import {Header} from 'react-native-elements';
 import Icon from "react-native-vector-icons/Ionicons";
 export default class Profile extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Profile',
+  });
+
 render() {
   return (
     <View style={styles.container}>

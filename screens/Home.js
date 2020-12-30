@@ -5,6 +5,10 @@ import {Header} from 'react-native-elements';
 import { Card, CardItem,Thumbnail,Body,Button} from 'native-base';
 const resim={oyuncak:(require('./assets/a.jpeg'))}
 export default class Home extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Home',
+  });
+
 render() {
   return (
     <View style={styles.container}>
