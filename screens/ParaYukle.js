@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default function App() {
+const ParaYukle = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -31,11 +31,11 @@ export default function App() {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button color="#b03060" title={'Ana Menüye Dön'} onPress={() => setScanned(false)} />}
+      {scanned && <Button color="#b03060" title={'Tekrar Karekod Oku'} onPress={() => setScanned(false)} />}
     </View>
   );
 }
-
+export default ParaYukle;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
