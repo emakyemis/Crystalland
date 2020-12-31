@@ -1,9 +1,11 @@
-import React from 'react';
-import { createAppContainer } from 'react-navigation';
+import React,{Component} from 'react';
+import { createAppContainer,createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import DrawerContainer from "./DrawerContainer";
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import ParaYukle from './screens/ParaYukle';
@@ -24,7 +26,7 @@ const ParaYukleScreens = createStackNavigator(
   },
 );
 
-const HomeScreens = createStackNavigator(
+const ProfileScreens = createStackNavigator(
   {
     Profile,
   },
@@ -35,7 +37,7 @@ const HomeScreens = createStackNavigator(
   },
 );
 
-const ProfileScreens = createStackNavigator(
+const HomeScreens = createStackNavigator(
   {
     Home,
   },
@@ -51,9 +53,10 @@ const TabNavigator = createBottomTabNavigator(
     Profile: ProfileScreens,
     Home: HomeScreens,
     ParaYukle: ParaYukleScreens,
+
   },
   {
-    //initialRouteName: 'Home',
+    initialRouteName: 'Home',
     tabBarPosition: 'bottom',
     tabBarOptions: {
       style: {
@@ -66,5 +69,32 @@ const TabNavigator = createBottomTabNavigator(
     },
   },
 );
+const DrawerStack = createDrawerNavigator(
+  {
+    Tab: TabNavigator
+  },
+  {
+    drawerPosition: 'left',
+    initialRouteName: 'Tab',
+    drawerWidth: 250,
+    contentComponent: DrawerContainer
+  }
+);
 
-export default createAppContainer(TabNavigator);
+
+
+export default class MainAppContainer extends Component {
+ 
+  render() {
+      return (<AppContainer />);
+  }
+}
+
+
+const AppContainer = createAppContainer(
+  createSwitchNavigator(
+    {
+      App:DrawerStack,
+      TabNavigator,
+    }
+  ));
