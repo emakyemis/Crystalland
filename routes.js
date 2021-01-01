@@ -9,6 +9,8 @@ import DrawerContainer from "./DrawerContainer";
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import ParaYukle from './screens/ParaYukle';
+import LoginScreen from './screens/Login';
+import RegisterScreen from './screens/Register';
 
 const getTabBarIcon = icon => ({ tintColor }) => (
   <MaterialIcons name={icon} size={26} style={{ color: tintColor }} />
@@ -80,11 +82,37 @@ const DrawerStack = createDrawerNavigator(
     contentComponent: DrawerContainer
   }
 );
-
+const AuthStack = createStackNavigator({
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  Register: {
+    screen: RegisterScreen,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+});
 
 
 export default class MainAppContainer extends Component {
- 
+  constructor(props) {
+
+    super(props);
+
+    this.state = {
+
+      role: '',
+    }
+
+    this.arrayholder = [];
+    this.navigation = props.navigation;
+
+  }
+
   render() {
       return (<AppContainer />);
   }
@@ -94,7 +122,18 @@ export default class MainAppContainer extends Component {
 const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
-      App:DrawerStack,
-      TabNavigator,
-    }
-  ));
+      Loading: {
+        screen: LoginScreen,
+        navigationOptions: {
+          headerShown: false,
+        },
+      },
+      App: DrawerStack,TabNavigator,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'Loading',
+    },
+    
+  )
+);
