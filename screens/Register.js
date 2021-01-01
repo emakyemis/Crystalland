@@ -1,13 +1,48 @@
 
 import React from 'react';
-import {ImageBackground,StyleSheet,Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView,Image,SafeAreaView} from 'react-native';
+import {ImageBackground,StyleSheet,Keyboard, Text, View, TextInput, TouchableWithoutFeedback,TouchableOpacity, Alert, KeyboardAvoidingView,Image,SafeAreaView} from 'react-native';
 import { Button } from 'react-native-elements';
 import { useState } from 'react';
-import DatePicker from 'react-native-datepicker';
+import DatePicker from '@react-native-community/datetimepicker';
 
-const image={dolap:require('./assets/dönme_dolap.jpg'),};
-	const Register = () => {
-		const [date, setDate] = useState('09-10-2020');
+import firebase from 'firebase';
+
+  
+const image={dolap:require('../assets/dönme_dolap.jpg'),};
+	const Register = props => {
+		const navigation = props.navigation;
+
+  const [state, setState] = useState({
+	isim: '',
+	soyisim: '',
+    email: '',
+    password: '',
+	telefon: '',
+    errMess: null,
+
+  });
+
+  const handleSignUp = async () => {
+    /*const createToken = (await Notifications.getExpoPushTokenAsync()).data;
+
+    console.log(createToken);*/
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(state.email, state.password)
+      .then(userCredentials => {
+
+        firebase
+          .database()
+          .ref('/users')
+          .push({ email: state.email, isim: state.isim, soyisim:state.soyisim ,telefon:state.telefon,cuzdan: 0, role: "user"});
+        navigation.navigate('Login');
+      })
+      .catch(err => {
+        setState({ errMess: err.message });
+      });
+  };
+		//const [date, setDate] = useState('09-10-2020');
 		return (
 		  <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 			  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -18,46 +53,30 @@ const image={dolap:require('./assets/dönme_dolap.jpg'),};
 						<View style={styles.loginScreenContainer}>
 							<View style={styles.loginFormView}>
 							
-								<View style={styles.satir}><Text style={styles.baslik}>Ad:</Text><TextInput placeholder="Adınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} /></View>
+								<View style={styles.satir}><Text style={styles.baslik}>Ad:</Text><TextInput placeholder="Adınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
+            onChangeText={displayName => {
+              setState({ ...state, displayName });
+            }}
+            value={state.displayName}/></View>
 								<View style={styles.satir}><Text style={styles.baslik}>Soyad:</Text><TextInput placeholder="Soyadınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} /></View>
-								<View style={styles.satir}><Text style={styles.baslik}>E-Mail:</Text><TextInput keyboardType={'email-address'} placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} /></View>
-								<View style={styles.satir}><Text style={styles.baslik}>Şifre:</Text><TextInput placeholder="Şifre" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true}/></View>
+								<View style={styles.satir}><Text style={styles.baslik}>E-Mail:</Text><TextInput keyboardType={'email-address'} placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
+            onChangeText={email => {
+              setState({ ...state, email });
+            }}
+            value={state.email}/></View>
+								<View style={styles.satir}><Text style={styles.baslik}>Şifre:</Text><TextInput placeholder="Şifre" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} 
+            onChangeText={password => {
+              setState({ ...state, password });
+            }}
+            value={state.password}/></View>
 								<View style={styles.satir}><Text style={styles.baslik}>Tel No:</Text><TextInput keyboardType={'phone-pad'} placeholder="Telefon Numarası" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}/></View>
-								<View style={styles.satir}><Text style={styles.baslik}>D. Tarihi:</Text>
 								
-									<DatePicker
-									style={styles.datePickerStyle}
-									date={date} //initial date from state
-									mode="date" //The enum of date, datetime and time
-									placeholder="select date"
-									format="DD-MM-YYYY"
-									minDate="01-01-2016"
-									maxDate="01-01-2019"
-									confirmBtnText="Confirm"
-									cancelBtnText="Cancel"
-									customStyles={{
-										dateIcon: {
-										//display: 'none',
-										position: 'absolute',
-										left: 0,
-										top: 4,
-										marginLeft: 0,
-										},
-										dateInput: {
-										marginLeft: 36,
-										},
-									}}
-									onDateChange={(date) => {
-										setDate(date);
-									}}
-									/>
-								</View>
+								
 
-								<Button
-								buttonStyle={styles.loginButton}
-								onPress={() => this.onLoginPress()}
-								title="Giriş"
-								/>								
+								<TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.textButton}>Kayıt ol</Text>
+        </TouchableOpacity>		
+
 							</View>							
 									</View>					
 						</ImageBackground>
@@ -80,6 +99,7 @@ const styles = StyleSheet.create({
   satir: {
 	  flexDirection: 'row',
 	  alignItems: 'center',
+	  width:425,
   },
   container: {
     flex: 1,
@@ -89,6 +109,7 @@ baslik:{
 	fontSize : 16,
 	fontWeight:'bold',
 	color:'#7E354D',
+	marginLeft:30,
 },
   image_container: {
     flex: 1,
@@ -118,10 +139,11 @@ baslik:{
 	  borderWidth: 1,
 	  borderColor: '#eaeaea',
 	  backgroundColor: '#fafafa',
-	  width: 400,
+	  width: 250,
 	  margin: 20,
+	  marginLeft:50,
 	  textAlign:'center',
-	
+	  justifyContent:'flex-end',
 	},
 	loginButton: {
 	  backgroundColor: '#7E354D',
