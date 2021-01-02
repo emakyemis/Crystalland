@@ -48,6 +48,13 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
             }}
           />
+          <MenuButton
+            title="HAKKINDA"
+            onPress={() => {
+              navigation.navigate('Hakkında');
+              navigation.closeDrawer();
+            }}
+          />
          <MenuButton
             title="ÇIKIŞ YAP"
             onPress={

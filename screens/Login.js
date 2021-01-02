@@ -1,12 +1,37 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { ImageBackground } from 'react-native';
-import {StyleSheet,Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView,Image} from 'react-native';
+import {StyleSheet,Keyboard, Text, View, TextInput, TouchableWithoutFeedback,TouchableOpacity, Alert, KeyboardAvoidingView,Image} from 'react-native';
 import { Button } from 'react-native-elements';
 
+import firebase from 'firebase';
 
-const image={dolap:require('./assets/dönme_dolap.jpg'),};
-export default class Login extends React.Component {
-	render() {
+const image={dolap:require('../assets/dönme_dolap.jpg'),};
+
+const Login = props => {
+	const navigation = props.navigation;
+	const [state, setState] = useState({
+		email: '',
+		password: '',
+		errMess: null,
+	  });
+	
+	  const handleLogin = () => {
+		const { email, password } = state;
+		const check = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		{
+		  !email || check.test(email.toString()) === false
+			? setState({ errMess: 'Email formatını doğru giriniz' })
+			: firebase
+			  .auth()
+			  .signInWithEmailAndPassword(email, password)
+			  .catch(err => {
+				console.log(err);
+				setState({ errMess: err.message });
+			
+			  });
+		}
+	  };
+	
 		return (
 		  <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 			  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -17,14 +42,21 @@ export default class Login extends React.Component {
 						<View style={styles.loginScreenContainer}>
 							<View style={styles.loginFormView}>
 							
-								<TextInput placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
-								<TextInput placeholder="Şifre" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true}/>
-								<Button
-								buttonStyle={styles.loginButton}
-								onPress={() => this.onLoginPress()}
-								title="Giriş"
-								/>
-								<Text style={styles.kaydol}	onPress={() => this.onFbLoginPress()}>"Üye değilseniz kaydolmak için tıklayınız!"</Text>
+								<TextInput placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
+            onChangeText={email => {
+              setState({ ...state, email });
+            }}
+            value={state.email} />
+								<TextInput placeholder="Şifre" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} onChangeText={password => {
+              setState({ ...state, password });
+            }}
+            value={state.password}/>
+								<TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.textButton}>Giriş yap</Text>
+        </TouchableOpacity>
+								<Text style={styles.kaydol}	onPress={() => {
+            navigation.navigate('Register');
+          }}>"Üye değilseniz kaydolmak için tıklayınız!"</Text>
 								
 							</View>
 							
@@ -38,17 +70,9 @@ export default class Login extends React.Component {
 		);
 	  }
 	
-	  componentDidMount() {
-	  }
-	
-	  componentWillUnmount() {
-	  }
-	
-	  onLoginPress() {
-	
-	  }
-	
-	  async onFbLoginPress() {
+	  
+	export default Login;
+	 // async onFbLoginPress() {
 		/*const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
 		  permissions: ['public_profile', 'email'],
 		});
@@ -60,8 +84,8 @@ export default class Login extends React.Component {
 			`Hi ${(await response.json()).name}!`,
 		  );
 		}*/
-	  }
-}
+	 // }
+
 
 const styles = StyleSheet.create({
 	containerView: {

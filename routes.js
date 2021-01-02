@@ -9,9 +9,10 @@ import DrawerContainer from "./DrawerContainer";
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import ParaYukle from './screens/ParaYukle';
+import BakiyeGuncelle from './screens/BakiyeGuncelle';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
-import Admin from './screens/Admin';
+import Hakkında from './screens/Hakkında';
 import firebase, { database } from 'firebase';
 import LoadingScreen from './screens/Loading';
 const getTabBarIcon = icon => ({ tintColor }) => (
@@ -29,7 +30,28 @@ const ParaYukleScreens = createStackNavigator(
     },
   },
 );
-
+const BakiyeGuncelleScreens = createStackNavigator(
+  {
+    BakiyeGuncelle,
+  },
+  {
+    
+    navigationOptions: {
+      tabBarIcon: getTabBarIcon('list'),
+    },
+  },
+);
+const HakkındaScreens = createStackNavigator(
+  {
+    Hakkında,
+  },
+  {
+    
+    navigationOptions: {
+      tabBarIcon: getTabBarIcon('about'),
+    },
+  },
+);
 const ProfileScreens = createStackNavigator(
   {
     Profile,
@@ -54,10 +76,11 @@ const HomeScreens = createStackNavigator(
 
 const TabNavigator = createBottomTabNavigator(
   {
+    BakiyeGuncelle:BakiyeGuncelleScreens,
     Profile: ProfileScreens,
     Home: HomeScreens,
     ParaYukle: ParaYukleScreens,
-
+    Hakkında:HakkındaScreens,
   },
   {
     initialRouteName: 'Home',
@@ -98,7 +121,6 @@ const AuthStack = createStackNavigator({
     },
   },
 });
-
 export default class MainAppContainer extends Component {
   constructor(props) {
 
