@@ -3,7 +3,23 @@ import { StyleSheet,View, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import MenuButton from './components/MenuButton';
+import firebase, { database } from 'firebase';
 
+const signOutUser = () => {
+  Alert.alert(
+    'Bildirim',
+    'Çıkmak istediğinize emin misiniz?',
+    [
+      {
+        text: 'Hayır',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'Evet', onPress: () => firebase.auth().signOut() },
+    ],
+    { cancelafble: false },
+  );
+};
 
 export default class DrawerContainer extends React.Component {
   render() {
@@ -32,7 +48,13 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
             }}
           />
-         
+         <MenuButton
+            title="ÇIKIŞ YAP"
+            onPress={
+              signOutUser
+              //navigation.closeDrawer();
+            }
+          />
         </View>
       </View>
     );

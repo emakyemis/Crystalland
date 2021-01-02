@@ -11,7 +11,9 @@ import Profile from './screens/Profile';
 import ParaYukle from './screens/ParaYukle';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
-
+import Admin from './screens/Admin';
+import firebase, { database } from 'firebase';
+import LoadingScreen from './screens/Loading';
 const getTabBarIcon = icon => ({ tintColor }) => (
   <MaterialIcons name={icon} size={26} style={{ color: tintColor }} />
 );
@@ -97,7 +99,6 @@ const AuthStack = createStackNavigator({
   },
 });
 
-
 export default class MainAppContainer extends Component {
   constructor(props) {
 
@@ -112,7 +113,29 @@ export default class MainAppContainer extends Component {
     this.navigation = props.navigation;
 
   }
+  componentDidMount() {
+    try {
+      const { email } = firebase.auth().currentUser;
+      const ref = firebase
+        .database()
+        .ref('/users')
+        .orderByChild('email')
+        .equalTo(email)
+        .once('value').then(snapshot => {
+          let data;
+          snapshot.forEach((childSub) => {
+            let key = childSub.key;
+            let childData = childSub.val();
+            data = childData.role;
+          });
+          this.setState({ role: data });
+          //.log('User data: ', snapshot.val());
+        });
+    } catch (e) {
+      //this.setState({ role: "admin" });
+    }
 
+  }
   render() {
       return (<AppContainer />);
   }
@@ -123,12 +146,12 @@ const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       Loading: {
-        screen: LoginScreen,
+        screen: LoadingScreen,
         navigationOptions: {
           headerShown: false,
         },
       },
-      App: DrawerStack,TabNavigator,
+       App: DrawerStack,TabNavigator,
       Auth: AuthStack,
     },
     {
