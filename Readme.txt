@@ -9,5 +9,3 @@ Bu listeden herhangi bir cihaz seçildiğinde bakiyesi yeterliyse oyuncak giriş
 Bakiye yetersizse uyarı mesajı alır.
 Bakiye yükleme sayfasında karekod kullanarak bakiye yükleme yapılabilir.
 
-
-Projede indirilmesi gereken node_modules dosyaları:
