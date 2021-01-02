@@ -6,10 +6,13 @@ import { useState } from 'react';
 import DatePicker from '@react-native-community/datetimepicker';
 
 import firebase from 'firebase';
+import database from '@react-native-firebase/database';
 
   
 const image={dolap:require('../assets/dönme_dolap.jpg'),};
-	const Register = props => {
+
+
+const Register = props => {
 		const navigation = props.navigation;
 
   const [state, setState] = useState({
@@ -26,7 +29,9 @@ const image={dolap:require('../assets/dönme_dolap.jpg'),};
     /*const createToken = (await Notifications.getExpoPushTokenAsync()).data;
 
     console.log(createToken);*/
-
+	if (!firebase.apps.length) {
+		firebase.initializeApp({});
+	}
     firebase
       .auth()
       .createUserWithEmailAndPassword(state.email, state.password)
@@ -40,7 +45,8 @@ const image={dolap:require('../assets/dönme_dolap.jpg'),};
       })
       .catch(err => {
         setState({ errMess: err.message });
-      });
+	  });
+	
   };
 		//const [date, setDate] = useState('09-10-2020');
 		return (
@@ -54,11 +60,15 @@ const image={dolap:require('../assets/dönme_dolap.jpg'),};
 							<View style={styles.loginFormView}>
 							
 								<View style={styles.satir}><Text style={styles.baslik}>Ad:</Text><TextInput placeholder="Adınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
-            onChangeText={displayName => {
-              setState({ ...state, displayName });
+            onChangeText={isim => {
+              setState({ ...state, isim });
             }}
-            value={state.displayName}/></View>
-								<View style={styles.satir}><Text style={styles.baslik}>Soyad:</Text><TextInput placeholder="Soyadınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} /></View>
+            value={state.isim}/></View>
+								<View style={styles.satir}><Text style={styles.baslik}>Soyad:</Text><TextInput placeholder="Soyadınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}
+            onChangeText={soyisim => {
+              setState({ ...state, soyisim });
+            }}
+            value={state.soyisim}/> </View>
 								<View style={styles.satir}><Text style={styles.baslik}>E-Mail:</Text><TextInput keyboardType={'email-address'} placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
             onChangeText={email => {
               setState({ ...state, email });
@@ -69,7 +79,11 @@ const image={dolap:require('../assets/dönme_dolap.jpg'),};
               setState({ ...state, password });
             }}
             value={state.password}/></View>
-								<View style={styles.satir}><Text style={styles.baslik}>Tel No:</Text><TextInput keyboardType={'phone-pad'} placeholder="Telefon Numarası" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}/></View>
+								<View style={styles.satir}><Text style={styles.baslik}>Tel No:</Text><TextInput keyboardType={'phone-pad'} placeholder="Telefon Numarası" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}
+            onChangeText={telefon => {
+              setState({ ...state, telefon });
+            }}
+            value={state.telefon}/></View>
 								
 								
 
