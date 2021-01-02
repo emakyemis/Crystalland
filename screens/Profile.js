@@ -80,13 +80,9 @@ render() {
             </View>
           <View style={{flex: 1, backgroundColor:'#fff'}}></View>
           <View style={styles.ProfilBilgi}>
-          <Text style={styles.TextBaslik}>Adı :</Text>
+          <Text style={styles.TextBaslik}>Adı Soyadı:</Text>
             <Text style={styles.TextIcerik}>{this.state.isim}</Text>
           
-          </View>
-          <View style={styles.ProfilBilgi}>
-            <Text style={styles.TextBaslik}>Soyadı :</Text>
-            <Text style={styles.TextIcerik}>{this.state.soyisim}</Text>
           </View>
           <View style={styles.ProfilBilgi}>
             <Text style={styles.TextBaslik}>Telefon No. :</Text>

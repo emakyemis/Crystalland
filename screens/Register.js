@@ -19,7 +19,6 @@ const Register = props => {
 
   const [state, setState] = useState({
 	isim: '',
-	soyisim: '',
     email: '',
     password: '',
 	telefon: '',
@@ -27,9 +26,6 @@ const Register = props => {
 
   });
   const handleSignUp = async () => {
-    const createToken = (await Notifications.getExpoPushTokenAsync()).data;
-
-    console.log(createToken);
 	if (!firebase.apps.length) {
 		firebase.initializeApp({});
 	}
@@ -41,7 +37,7 @@ const Register = props => {
         firebase
           .database()
           .ref('/users')
-          .push({ email: state.email, isim: state.isim, soyisim:state.soyisim ,telefon:state.telefon,cuzdan: 0, role: "user"});
+          .push({ email: state.email, isim: state.isim ,telefon:state.telefon,cuzdan: 0, role: "user"});
         navigation.navigate('Login');
       })
       .catch(err => {
@@ -65,11 +61,6 @@ const Register = props => {
               setState({ ...state, isim });
             }}
             value={state.isim}/></View>
-								<View style={styles.satir}><Text style={styles.baslik}>Soyad:</Text><TextInput placeholder="Soyadınız" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}
-            onChangeText={soyisim => {
-              setState({ ...state, soyisim });
-            }}
-            value={state.soyisim}/> </View>
 								<View style={styles.satir}><Text style={styles.baslik}>E-Mail:</Text><TextInput keyboardType={'email-address'} placeholder="E-Mail" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} 
             onChangeText={email => {
               setState({ ...state, email });
