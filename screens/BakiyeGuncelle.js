@@ -4,7 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import firebase from 'firebase';
 import FirebaseKeys from '../config';
 
-const ParaYukle = () => {
+const BakiyeGuncelle = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
  
@@ -27,17 +27,23 @@ const ParaYukle = () => {
         .once('value').then(snapshot => {
           snapshot.forEach((childSub) => {
            let key = childSub.key;
-           firebase
-            .database()
-            .ref('/users/'+key)
-            .update({cuzdan:parseInt(childSub.val().cuzdan)+parseInt(data)})
+           if(parseInt(childSub.val().cuzdan)-parseInt(data)>=0){
+                firebase
+                .database()
+                .ref('/users/'+key)
+                .update({cuzdan:parseInt(childSub.val().cuzdan)-parseInt(data)})
+                alert(`Artık binebilirsiniz.`);
+            
+           }
+          else{
+            alert(`Bakiye Yetersiz!!!`);
+          }
           });
         });
      
         
     } catch (e) {
     }
-    alert(`${data}₺ yüklendi.`);
   };
 
   if (hasPermission === null) {
@@ -57,7 +63,7 @@ const ParaYukle = () => {
     </View>
   );
 }
-export default ParaYukle;
+export default BakiyeGuncelle;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

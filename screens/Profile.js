@@ -26,7 +26,7 @@ export default class Profile extends React.Component {
     this.navigation = props.navigation;
 
   }
-  componentDidMount() {
+  GetProfil=()=>{
     try {
       const { email } = firebase.auth().currentUser;
       const ref = firebase
@@ -51,6 +51,9 @@ export default class Profile extends React.Component {
     } catch (e) {
       //this.setState({ role: "admin" });
     }
+  }
+  componentDidMount() {
+    this.GetProfil();
 
   }
 render() {
@@ -60,6 +63,7 @@ render() {
             backgroundColor={{color:'#fff'}}
             leftComponent={{ icon: 'menu', color: '#b03060' }}
             centerComponent={{ text: 'PROFILE', style: { color: '#b03060' ,fontSize:20 } }}
+            rightComponent={{ icon: 'update', color: '#b03060',onPress:this.GetProfil() }}
           />
         <View style={styles.item2}>
           <Icon

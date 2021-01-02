@@ -4,9 +4,11 @@ import {ImageBackground,StyleSheet,Keyboard, Text, View, TextInput, TouchableWit
 import { Button } from 'react-native-elements';
 import { useState } from 'react';
 import DatePicker from '@react-native-community/datetimepicker';
+import * as Notifications from 'expo-notifications';
 
 import firebase from 'firebase';
 import database from '@react-native-firebase/database';
+
 
   
 const image={dolap:require('../assets/dönme_dolap.jpg'),};
@@ -24,11 +26,10 @@ const Register = props => {
     errMess: null,
 
   });
-
   const handleSignUp = async () => {
-    /*const createToken = (await Notifications.getExpoPushTokenAsync()).data;
+    const createToken = (await Notifications.getExpoPushTokenAsync()).data;
 
-    console.log(createToken);*/
+    console.log(createToken);
 	if (!firebase.apps.length) {
 		firebase.initializeApp({});
 	}
